@@ -1,0 +1,13 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          xmlns:tools="http://schemas.android.com/tools"
+          package="com.pandora.vanity">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <application
+            android:theme="@style/Theme.AppCompat"
+            tools:replace="android:theme">
+        <activity android:name=".activity.VanityActivity"/>
+    </application>
+
+</manifest>
