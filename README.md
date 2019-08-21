@@ -49,7 +49,7 @@ Vanity works with AndroidX apps. It is built in Kotlin on top of Architecture Co
 
 ```groovy
 dependencies {
-    implementation 'com.pandora.vanity:vanity:1.1'
+    implementation 'com.pandora.vanity:vanity:1.0'
 }
 ```
 
