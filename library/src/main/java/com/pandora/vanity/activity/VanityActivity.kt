@@ -31,6 +31,7 @@ import androidx.annotation.VisibleForTesting
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProviders
 import com.pandora.vanity.VanityConstants
+import com.pandora.vanity.R
 import com.pandora.vanity.lifecycle.VanityViewModel
 import com.pandora.vanity.util.VanityUtils
 import com.pandora.vanity.model.VanityData
@@ -62,12 +63,12 @@ open class VanityActivity : AppCompatActivity() {
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        setContentView(com.pandora.vanity.R.layout.auth_activity)
+        setContentView(R.layout.auth_activity)
 
         setResult(Activity.RESULT_CANCELED)
 
-        mProgressBar = findViewById(com.pandora.vanity.R.id.progressBar)
-        mWebView = findViewById(com.pandora.vanity.R.id.webview)
+        mProgressBar = findViewById(R.id.progressBar)
+        mWebView = findViewById(R.id.webview)
 
         viewModel = ViewModelProviders.of(this)[VanityViewModel::class.java]
 
