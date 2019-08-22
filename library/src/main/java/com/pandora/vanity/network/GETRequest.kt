@@ -18,6 +18,7 @@
 
 package com.pandora.vanity.network
 
+import android.webkit.CookieManager
 import com.pandora.vanity.VanityConstants
 
 import java.io.ByteArrayOutputStream
@@ -47,6 +48,13 @@ open class GETRequest(url: String?) : Request(url) {
 
             conn?.let {
                 it.setRequestProperty("User-Agent", VanityConstants.USER_AGENT)
+                val cookieManager = CookieManager.getInstance()
+                if (cookieManager != null) {
+                    val cookies = cookieManager.getCookie(VanityConstants.INSTAGRAM_URL)
+                    if (cookies != null) {
+                        it.setRequestProperty("Cookie", cookies)
+                    }
+                }
                 it.connectTimeout = 10000
                 it.readTimeout = 10000
                 it.requestMethod = "GET"

@@ -24,6 +24,7 @@ interface VanityConstants {
         // API host
         const val INSTAGRAM_HOST = "https://api.instagram.com"
         const val ALT_INSTAGRAM_HOST = "https://i.instagram.com"
+        const val INSTAGRAM_URL = "https://www.instagram.com/"
 
         // API version
         const val INSTAGRAM_API_VERSION = "/v1"

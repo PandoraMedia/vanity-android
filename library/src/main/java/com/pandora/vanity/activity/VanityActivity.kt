@@ -41,6 +41,7 @@ import io.reactivex.schedulers.Schedulers
 import java.io.UnsupportedEncodingException
 import java.net.MalformedURLException
 import java.net.URL
+import android.webkit.CookieManager
 
 @SuppressLint("SetJavaScriptEnabled")
 open class VanityActivity : AppCompatActivity() {
@@ -56,6 +57,8 @@ open class VanityActivity : AppCompatActivity() {
     private lateinit var mWebView: WebView
 
     private var pictureQuality: String = VanityConstants.DEFAULT_QUALITY
+
+    private var mAuthorizationUrl: String? = null
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -96,7 +99,8 @@ open class VanityActivity : AppCompatActivity() {
             }
 
             try {
-                mWebView.loadUrl(VanityUtils.constructAuthorizationUrl(clientId, redirectUri))
+                mAuthorizationUrl = VanityUtils.constructAuthorizationUrl(clientId, redirectUri)
+                mWebView.loadUrl(mAuthorizationUrl)
             } catch (ex: UnsupportedEncodingException) {
                 processError(ex.message)
             }
@@ -112,8 +116,19 @@ open class VanityActivity : AppCompatActivity() {
         return object : WebViewClient() {
             override fun shouldOverrideUrlLoading(view: WebView, url: String): Boolean {
                 if (url.startsWith(redirectUri)) {
+                    // Store off the session cookies, if any. They are necessary to retrieve
+                    // high definition profile pictures
+                    val cookieManager = CookieManager.getInstance()
+                    val cookies = cookieManager.getCookie(mAuthorizationUrl)
+                    if (cookies != null) {
+                        cookieManager.setCookie(VanityConstants.INSTAGRAM_URL, cookies)
+                    }
+
                     processRedirect(url)
+                } else if (url == VanityConstants.INSTAGRAM_URL) {
+                    mWebView.loadUrl(mAuthorizationUrl)
                 }
+
                 return false
             }
         }
@@ -129,7 +144,10 @@ open class VanityActivity : AppCompatActivity() {
             .doOnError { updateFromDownload(null) }
             .subscribe(
                 { updateFromDownload(it) },
-                { Log.d(TAG, "Error while attempting to download profile info: ${it.message}") })
+                {
+                    Log.e(TAG, "Error while attempting to download profile info: ${it.message}")
+                    updateFromDownload(null)
+                })
         )
     }
 
