@@ -66,7 +66,10 @@ class VanityViewModel : ViewModel() {
             .doOnError { Single.error<VanityData>(it) }
             .subscribe(
                 { downstatusStatusPublisher.onNext(it) },
-                { Log.d(TAG, "Error while attempting to download profile info: ${it.message}") })
+                {
+                    Log.e(TAG, "Error while attempting to download profile info: ${it.message}")
+                    downstatusStatusPublisher.onError(it)
+                })
         )
     }
 
